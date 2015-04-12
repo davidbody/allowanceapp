@@ -36,3 +36,5 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.0'
   gem 'byebug', '~> 3.5.1'
 end 
+
+gem "cocoon"
