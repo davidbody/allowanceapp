@@ -46,7 +46,7 @@ class ParentsController < ApplicationController
   
   private
   def parent_params
-    params.require(:parent).permit(:parent_name, :family_name)
+    params.require(:parent).permit(:parent_name, :family_name, :image)
   end
   
   def find_parent
