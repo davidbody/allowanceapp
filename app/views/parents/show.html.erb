@@ -3,12 +3,13 @@
 
   <h1><%= @parent.parent_name %> </h1>
   <h1><%= @parent.family_name %> </h1>
-  
-  <% @parent.kids.each do |kid| %>
-  <%= kid.kid_name%>&nbsp; <br />
-  <% end %>
+  <% @kids.each do |kid | %>
+    <%= kid.kid_name%>&nbsp; <br />
+
+      <% end %>
+
 
 
       <%= link_to "Back", root_path, class: "btn btn-default" %>
-
+  <%= link_to "Delete", parent_path, method: :delete, data: {confirm: "Are you sure?" }, class: "btn btn-default" %>
 </div>

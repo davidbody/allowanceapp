@@ -2,6 +2,10 @@ class ParentsController < ApplicationController
   
   before_action :find_parent, only: [:show, :edit, :update, :destroy]
   
+  before_action :find_kids, only: [:show, :edit, :update, :destroy]
+
+
+  
   before_action :authenticate_user!
  
   before_action :ensure_parent_ownership, only: [:edit, :update, :destroy]
@@ -10,20 +14,24 @@ class ParentsController < ApplicationController
       
    end
 
-   def show
-
+   def show  
+     
    end
      
    def new
-     @parent = current_user.create_parent
+     @parent = current_user.build_parent
+     @kid = @parent.kids.build
+     @kid.build_allow
+    
    end
 
-   def create 
-     @parent = current_user.create_parent(parent_params)
-     if @parent.save
-       redirect_to @parent, notice: "Parent has been created!"
+   def create
+     @parent = current_user.create_parent(parent_params)  
+
+      if @parent.save
+         redirect_to(@parent, :notice => 'Parent was successfully created.')
       else
-        render "new"
+        render "new" 
       end
    end
    
@@ -31,13 +39,16 @@ class ParentsController < ApplicationController
 
 	end
 
-	def update
-    if @parent.update(parent_params)
-      redirect_to @parent
-		else
-			render 'edit'
-		end
-	end
+  def update
+
+      if @parent.update_attributes(parent_params)
+        redirect_to @parent
+      else
+        render 'edit'
+      end
+
+  end
+
    
 	def destroy
     @parent.destroy
@@ -46,19 +57,34 @@ class ParentsController < ApplicationController
   
   private
   def parent_params
-    params.require(:parent).permit(:parent_name, :family_name, :image, kids_attributes: [:id, :kid_name, :kid_age, :kid_gender, :_destroy])
+    params.require(:parent).permit(
+      :parent_name, :family_name, :image, 
+      kids_attributes: [:id, :kid_name, :kid_age, :kid_gender, :_destroy, 
+      {allow_attributes: [:id, :_destroy, :allowance_amount, :allowance_frequency]}]
+      )
   end
   
+   
   def find_parent
     @parent = Parent.find(params[:id])
   end
   
+  def find_kids    
+    for each @kids = Kid.where(parent_id: @parent.id)   
+      @kid = kid 
+    end
+    
+  end
   
+  def find_allow
+    @allows = Allow.where(kid_id: @kids.id)
+  end
+  
+
   def ensure_parent_ownership
     if current_user != Parent.find(params[:id]).user
       redirect_to root_path, "You do not have access to do perform that action"
     end
   end
-  
 
  end
