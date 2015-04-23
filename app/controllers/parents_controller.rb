@@ -1,11 +1,7 @@
 class ParentsController < ApplicationController
   
   before_action :find_parent, only: [:show, :edit, :update, :destroy]
-  
-  before_action :find_kids, only: [:show, :edit, :update, :destroy]
-
-
-  
+    
   before_action :authenticate_user!
  
   before_action :ensure_parent_ownership, only: [:edit, :update, :destroy]
@@ -20,8 +16,8 @@ class ParentsController < ApplicationController
      
    def new
      @parent = current_user.build_parent
-     @kid = @parent.kids.build
-     @kid.build_allow
+     @kids = @parent.kids.build
+
     
    end
 
@@ -60,7 +56,7 @@ class ParentsController < ApplicationController
     params.require(:parent).permit(
       :parent_name, :family_name, :image, 
       kids_attributes: [:id, :kid_name, :kid_age, :kid_gender, :_destroy, 
-      {allow_attributes: [:id, :_destroy, :allowance_amount, :allowance_frequency]}]
+      {allows_attributes: [:id, :_destroy, :allowance_amount, :allowance_frequency]}]
       )
   end
   
@@ -68,18 +64,6 @@ class ParentsController < ApplicationController
   def find_parent
     @parent = Parent.find(params[:id])
   end
-  
-  def find_kids    
-    for each @kids = Kid.where(parent_id: @parent.id)   
-      @kid = kid 
-    end
-    
-  end
-  
-  def find_allow
-    @allows = Allow.where(kid_id: @kids.id)
-  end
-  
 
   def ensure_parent_ownership
     if current_user != Parent.find(params[:id]).user

@@ -3,7 +3,7 @@
     b Allowance
   <%= f.input :allowance_amount %>
   <%= f.input :allowance_frequency %>
-  
-  <%= link_to_remove_association "remove allowance", f %>
+    <%= f.hidden_field :_destroy %>
+    <%= link_to "remove", "#", class: "remove_fields" %>
 
 </div>

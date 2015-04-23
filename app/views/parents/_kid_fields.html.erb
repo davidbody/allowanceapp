@@ -3,15 +3,16 @@
     <%= f.input :kid_name %>
     <%= f.input :kid_age %>
     <%= f.input :kid_gender %>
-  <%= link_to_remove_association "remove kid", f %>
+
+    <%= f.hidden_field :_destroy %>
+    <%= link_to "remove", "#", class: "remove_fields" %>
 
   <div class="allow">
-    <% p = @parent.kids.first %>
-    <%= f.simple_fields_for p.create_allow do |allow| %>
-    <%= render 'allow_fields', :f => allow %>
+    <%= f.simple_fields_for :allows do |builder| %>
+    <%= render 'allow_fields', :f => builder %>
     <% end %>
     <div class="links">
-      <%= link_to_add_association 'add allowance', f, :allow %>
+      <%= link_to_add_fields 'add allowance', f, :allows %>
     </div>
   </div>
 </div>

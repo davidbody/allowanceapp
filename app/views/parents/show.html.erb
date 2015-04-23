@@ -3,11 +3,13 @@
 
   <h1><%= @parent.parent_name %> </h1>
   <h1><%= @parent.family_name %> </h1>
-  <% @kids.each do |kid | %>
+  <% @parent.kids.each do |kid | %>
     <%= kid.kid_name%>&nbsp; <br />
-
+  <% kid.allows.each do |allow| %>
+  <%= allow.allowance_amount %>
+  <%= allow.allowance_frequency %>
       <% end %>
-
+  <% end %>
 
 
       <%= link_to "Back", root_path, class: "btn btn-default" %>
